@@ -3,6 +3,7 @@
 namespace App\Modules\Category\Infra\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Responses\ApiResponse;
 use App\Modules\Category\UseCases\ListCategoryUseCase;
 use App\Modules\Category\UseCases\SaveCategoryUseCase;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = $this->listCategoryUseCase->execute();
-        return response()->json($categories, 200);
+        return ApiResponse::success($categories);
     }
 
     public function store(Request $request)
@@ -32,9 +33,9 @@ class CategoryController extends Controller
             $situation = $request->input('situation');
             $category = $this->saveCategoryUseCase->execute($name, $situation);
 
-            return response()->json($category, 201);
+            return ApiResponse::success($category, 201);
         } catch (\Exception $error) {
-            return response()->json($error, 400);
+            return ApiResponse::error($error->getMessage());
         }
     }
 }

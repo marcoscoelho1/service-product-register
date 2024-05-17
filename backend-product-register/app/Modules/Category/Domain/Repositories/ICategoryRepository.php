@@ -8,4 +8,5 @@ interface ICategoryRepository
 {
     public function save(Category $category);
     public function find();
+    public function findById(int $id);
 }

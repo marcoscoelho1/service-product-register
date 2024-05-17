@@ -20,4 +20,9 @@ class CategoryRepository implements ICategoryRepository
     {
         return CategoryModel::all();
     }
+
+    public function findById($id)
+    {
+        return CategoryModel::find($id);
+    }
 }
