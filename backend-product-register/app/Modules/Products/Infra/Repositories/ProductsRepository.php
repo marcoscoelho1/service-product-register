@@ -21,6 +21,6 @@ class ProductsRepository implements IProductsRepository
 
     public function find()
     {
-        return ProductsModel::all();
+        return ProductsModel::with('category')->get();
     }
 }
