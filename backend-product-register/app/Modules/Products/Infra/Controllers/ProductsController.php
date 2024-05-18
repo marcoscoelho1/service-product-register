@@ -5,7 +5,6 @@ namespace App\Modules\Products\Infra\Controllers;
 use App\Http\Controllers\Controller;
 use App\Http\Responses\ApiResponse;
 use App\Modules\Products\UseCases\ListProductsUseCase;
-//use App\Modules\Products\UseCases\ListCategoryUseCase;
 use App\Modules\Products\UseCases\SaveProductsUseCase;
 use Illuminate\Http\Request;
 
@@ -38,9 +37,9 @@ class ProductsController extends Controller
             $product['image'] = $request->input('image') ?? '';
             $product['category_id'] = $request->input('category_id');
 
-            $category = $this->saveProductsUseCase->execute($product);
+            $products = $this->saveProductsUseCase->execute($product);
 
-            return ApiResponse::success($category);
+            return ApiResponse::success($products);
         } catch (\Exception $error) {
             return ApiResponse::error($error->getMessage());
         }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Responses\ApiResponse;
+use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 use Illuminate\Http\Request;
 
@@ -13,5 +15,14 @@ class Authenticate extends Middleware
     protected function redirectTo(Request $request): ?string
     {
         return $request->expectsJson() ? null : route('login');
+    }
+
+    public function handle($request, Closure $next, ...$guards)
+    {
+        if ($this->auth->guard($guards)->guest()) {
+            return ApiResponse::error('Not authorized.');
+        }
+
+        return $next($request);
     }
 }
