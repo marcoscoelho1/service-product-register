@@ -19,11 +19,11 @@ class SessionsController extends Controller
                 return ApiResponse::error('User email/password invalidated.');
             }
 
-            return response()->json([
+            return ApiResponse::success([
                 'token' => $token,
                 'token_type' => 'bearer',
                 'expires_in' => Auth::factory()->getTTL() * 60
-            ], 200);
+            ]);
         } catch (\Exception $error) {
             return ApiResponse::error($error->getMessage());
         }

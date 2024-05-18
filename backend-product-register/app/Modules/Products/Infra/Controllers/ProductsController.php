@@ -9,6 +9,7 @@ use App\Modules\Products\UseCases\SaveProductsUseCase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use App\Modules\Products\Infra\Requests\CreateProductRequest;
+use Illuminate\Support\Facades\Redis;
 
 class ProductsController extends Controller
 {
@@ -26,7 +27,7 @@ class ProductsController extends Controller
     {
         $perPage = $request->get('per_page') ?? null;
         $page = $request->get('page') ?? 1;
-        $cacheKey = ProductsController::PRODUCTS_CACHE_KEY . '_' . $page . '_' . $perPage;
+        $cacheKey = ProductsController::PRODUCTS_CACHE_KEY . ':' . $page . ':' . $perPage;
         $products = Cache::store('redis')->get($cacheKey);
 
         if (!$products) {
@@ -51,9 +52,19 @@ class ProductsController extends Controller
 
             $products = $this->saveProductsUseCase->execute($product);
 
+            $this->flushProductsCache();
+
             return ApiResponse::success($products);
         } catch (\Exception $error) {
             return ApiResponse::error($error->getMessage());
+        }
+    }
+
+    private function flushProductsCache()
+    {
+        $keys = Redis::keys('*:' . self::PRODUCTS_CACHE_KEY . ':*');
+        foreach ($keys as $key) {
+            Redis::del($key);
         }
     }
 }
