@@ -27,11 +27,13 @@ class ProductsController extends Controller
     {
         $perPage = $request->get('per_page') ?? null;
         $page = $request->get('page') ?? 1;
-        $cacheKey = ProductsController::PRODUCTS_CACHE_KEY . ':' . $page . ':' . $perPage;
+        $categoryId = $request->get('category_id') ?? null;
+
+        $cacheKey = ProductsController::PRODUCTS_CACHE_KEY . ':' . $page . ':' . $perPage . ':' . $categoryId;
         $products = Cache::store('redis')->get($cacheKey);
 
         if (!$products) {
-            $products = $this->listProductsUseCase->execute($perPage);
+            $products = $this->listProductsUseCase->execute($perPage, $categoryId);
             Cache::store('redis')->put($cacheKey, $products, now()->addHour());
         }
 

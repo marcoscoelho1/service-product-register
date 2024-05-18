@@ -13,9 +13,8 @@ class ListProductsUseCase
         $this->productsRepository = $productsRepository;
     }
 
-    public function execute($perPage = null)
+    public function execute($perPage = null, $categoryId = null)
     {
-
-        return $this->productsRepository->find($perPage);
+        return $this->productsRepository->find($perPage, $categoryId);
     }
 }

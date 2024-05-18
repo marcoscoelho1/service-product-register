@@ -19,8 +19,13 @@ class ProductsRepository implements IProductsRepository
         ]);
     }
 
-    public function find($perPage = 50)
+    public function find($perPage = 50, $category_id = null)
     {
-        return ProductsModel::with('category')->paginate($perPage);
+        $productsModel = ProductsModel::with('category');
+        if ($category_id) {
+            $productsModel->where('category_id', $category_id);
+        }
+
+        return $productsModel->paginate($perPage);
     }
 }
