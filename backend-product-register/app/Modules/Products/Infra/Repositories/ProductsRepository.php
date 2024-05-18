@@ -19,8 +19,8 @@ class ProductsRepository implements IProductsRepository
         ]);
     }
 
-    public function find()
+    public function find($perPage = 50)
     {
-        return ProductsModel::with('category')->get();
+        return ProductsModel::with('category')->paginate($perPage);
     }
 }

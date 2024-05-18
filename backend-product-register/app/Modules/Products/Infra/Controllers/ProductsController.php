@@ -20,9 +20,10 @@ class ProductsController extends Controller
         $this->listProductsUseCase = $listProductsUseCase;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $products = $this->listProductsUseCase->execute();
+        $perPage = $request->get('per_page') ?? null;
+        $products = $this->listProductsUseCase->execute($perPage);
         return ApiResponse::success($products);
     }
 
@@ -31,7 +32,6 @@ class ProductsController extends Controller
         try {
 
             $product = [];
-
             $product['name'] = $request->input('name');
             $product['price'] = $request->input('price');
             $product['situation'] = $request->input('situation');

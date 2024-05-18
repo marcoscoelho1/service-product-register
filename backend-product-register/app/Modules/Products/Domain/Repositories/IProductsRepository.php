@@ -7,5 +7,5 @@ use App\Modules\Products\Domain\Entities\Product;
 interface IProductsRepository
 {
     public function save(Product $product);
-    public function find();
+    public function find(int $perPage = 50);
 }
