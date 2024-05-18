@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Responses\ApiResponse;
 use App\Modules\Category\UseCases\ListCategoryUseCase;
 use App\Modules\Category\UseCases\SaveCategoryUseCase;
-use Illuminate\Http\Request;
+use App\Modules\Category\Infra\Requests\CreateCategoryRequest;
 
 class CategoryController extends Controller
 {
@@ -25,10 +25,11 @@ class CategoryController extends Controller
         return ApiResponse::success($categories);
     }
 
-    public function store(Request $request)
+    public function store(CreateCategoryRequest $request)
     {
-        try {
+        $request->validated();
 
+        try {
             $name = $request->input('name');
             $situation = $request->input('situation');
             $category = $this->saveCategoryUseCase->execute($name, $situation);

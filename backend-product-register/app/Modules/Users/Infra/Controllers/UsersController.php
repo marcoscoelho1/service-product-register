@@ -7,6 +7,7 @@ use App\Http\Responses\ApiResponse;
 use App\Modules\Users\UseCases\SaveUserUseCase;
 use App\Modules\Users\UseCases\ListUsersUseCase;
 use Illuminate\Http\Request;
+use App\Modules\Users\Infra\Requests\CreateUsersRequest;
 
 class UsersController extends Controller
 {
@@ -26,8 +27,10 @@ class UsersController extends Controller
         return ApiResponse::success($users);
     }
 
-    public function store(Request $request)
+    public function store(CreateUsersRequest $request)
     {
+        $request->validated();
+
         try {
 
             $user = [];

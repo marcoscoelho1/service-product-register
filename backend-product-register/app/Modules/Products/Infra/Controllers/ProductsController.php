@@ -8,6 +8,7 @@ use App\Modules\Products\UseCases\ListProductsUseCase;
 use App\Modules\Products\UseCases\SaveProductsUseCase;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use App\Modules\Products\Infra\Requests\CreateProductRequest;
 
 class ProductsController extends Controller
 {
@@ -36,10 +37,11 @@ class ProductsController extends Controller
         return ApiResponse::success($products);
     }
 
-    public function store(Request $request)
+    public function store(CreateProductRequest $request)
     {
-        try {
+        $request->validated();
 
+        try {
             $product = [];
             $product['name'] = $request->input('name');
             $product['price'] = $request->input('price');
